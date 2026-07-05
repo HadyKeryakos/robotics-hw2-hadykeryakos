@@ -28,7 +28,7 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const Fleet& f);
 
     void show_first_low_battery_robot() const;
-    void show_first_working_battery_robot() const;
+    void show_first_working_robot() const;
 
 private:
 

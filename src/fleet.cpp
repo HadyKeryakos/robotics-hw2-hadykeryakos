@@ -110,7 +110,7 @@ void Fleet::show_first_low_battery_robot() const
     std::cout << "First low battery robot: " << *it->second << "\n";
 }
 
-void Fleet::show_first_working_battery_robot() const
+void Fleet::show_first_working_robot() const
 {
     auto it = std::find_if(robots_.begin(), robots_.end(),
         [](const auto& pair) {
