@@ -44,6 +44,9 @@ std::string Robot::operator+(const Robot& other) const
     return name_ + " + " + other.name_;
 }
 
+//we declared this function as a "friend" because usually when calling member methods or overloading operators it would be robot "overloaded operator". 
+//in this case it would be robot << std::cout. Which is not the syntax we want. We want it to be std::cout << robot. So the method cant be a member method BUT still
+//has to be able to access the attributes of robot to print them out, which is the permissions given by the keyword friend.
 std::ostream& operator<<(std::ostream& os, const Robot& r)
 {
     os << "[" << r.type() << "] "
