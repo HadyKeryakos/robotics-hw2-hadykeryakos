@@ -17,6 +17,9 @@ public:
     int         battery() const;
     std::string status()  const;
 
+    //adding a setter so that fleet can change the status when a task is assigned to a robot
+    void set_status(const std::string& status);
+
     bool operator==(const Robot& other) const;
 
     // Returns e.g. "R2D2 + C3PO"

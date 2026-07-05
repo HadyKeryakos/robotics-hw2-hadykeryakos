@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 #include <ostream>
+#include <unordered_map>
+#include <queue>
 
 class Fleet {
 public:
@@ -25,8 +27,16 @@ public:
     Fleet& operator-=(const std::string& id);
     friend std::ostream& operator<<(std::ostream& os, const Fleet& f);
 
+    void show_first_low_battery_robot() const;
+    void show_first_working_battery_robot() const;
+
 private:
-    // Choose the right containers and justify each choice in a comment.
-    // Hint: robots need fast lookup by id.
-    // Hint: tasks must always come out highest priority first.
+
+    //It is better than using normal pointers because now it manages the deletion of robots automatically.
+    //And we should not use unique_ptr because if fleet needs to have the pointer to the robot our main will not be able to also control it and we will have to use std::move
+    //unordered_map gives fast lookup by robot id.
+    std::unordered_map<std::string, std::shared_ptr<Robot>> robots_;
+
+    // priority_queue keeps the highest priority task at the top which is what is required.
+    std::priority_queue<Task> tasks_;
 };
