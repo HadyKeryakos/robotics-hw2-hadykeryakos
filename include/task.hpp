@@ -15,3 +15,4 @@ struct Task {
 
     friend std::ostream& operator<<(std::ostream& os, const Task& t);
 };
+
