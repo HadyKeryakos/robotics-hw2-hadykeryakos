@@ -8,7 +8,7 @@ CleaningRobot::CleaningRobot(const std::string& id, const std::string& name, int
 {}
 
 void CleaningRobot::work(){
-    if (battery == 0)
+    if (battery_ == 0)
         throw std::runtime_error(name_ + "battery's empty: cannot clean");
     
     status_ = "working";

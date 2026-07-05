@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <ostream>
-class Task;
+struct Task;
 
 class Robot {
 public:

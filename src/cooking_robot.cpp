@@ -11,7 +11,7 @@ CookingRobot::CookingRobot(const std::string& id,
 {}
 
 void CookingRobot::work(){
-    if (battery == 0)
+    if (battery_ == 0)
         throw std::runtime_error(name_ + "battery's empty: cannot cook");
     
     status_ = "working";
