@@ -24,7 +24,7 @@ MobileRobot::~MobileRobot()
 
 void MobileRobot::work(){
     if (battery == 0)
-        throw std::runtime_error(name_ + "battery's empty: cannot work");
+        throw std::runtime_error(name_ + "battery's empty: cannot be mobile");
     
     status_ = "working";
     battery_ = std::clamp(battery_ - 20, 0, 100);
