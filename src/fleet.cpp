@@ -51,7 +51,11 @@ void Fleet::show_tasks() const
 void Fleet::work_all() const
 {
     for (const auto& pair : robots_) {
-        pair.second->work();
+        try {
+            pair.second->work();
+        } catch (const std::runtime_error& e) {
+            std::cout << "Error: " << e.what() << "\n";
+        }
     }
 }
 
@@ -118,9 +122,9 @@ void Fleet::show_first_working_robot() const
         });
 
     if (it == robots_.end()) {
-        std::cout << "No robot below 20% battery.\n";
+        std::cout << "No robot is currently working.\n";
         return;
     }
 
-    std::cout << "First low battery robot: " << *it->second << "\n";
+    std::cout << "First robot found working: " << *it->second << "\n";
 }

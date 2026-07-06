@@ -3,7 +3,10 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <mutex>
 #include <stdexcept>
+
+extern std::mutex g_cout_mutex;
 
 MobileRobot::MobileRobot(const std::string& id,
                          const std::string& name,
@@ -24,12 +27,12 @@ MobileRobot::~MobileRobot()
 
 void MobileRobot::work(){
     if (battery_ == 0)
-        throw std::runtime_error(name_ + "battery's empty: cannot be mobile");
+        throw std::runtime_error(name_ + " battery's empty: cannot be mobile");
     
     status_ = "working";
     battery_ = std::clamp(battery_ - 20, 0, 100);
 
-    std::cout << name_ << "is moving at speed " << speed_ << " m/s with remaining battery : " << battery_ << "%\n";
+    std::cout << name_ << " is moving at speed " << speed_ << " m/s with remaining battery : " << battery_ << "%\n";
 }
 
 std::string MobileRobot::type() const{
@@ -54,9 +57,11 @@ void MobileRobot::start_work(int seconds)
     worker_ = std::thread([this, seconds]() {
         for (int i = 0; i < seconds && !stop_; ++i) {
             try {
+                std::lock_guard<std::mutex> lock(g_cout_mutex);
                 work();
                 std::cout << "Status: " << status() << "\n";
             } catch (const std::runtime_error& e) {
+                std::lock_guard<std::mutex> lock(g_cout_mutex);
                 std::cout << "Error: " << e.what() << "\n";
                 break;
             }

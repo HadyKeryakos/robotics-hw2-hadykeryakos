@@ -12,12 +12,12 @@ CookingRobot::CookingRobot(const std::string& id,
 
 void CookingRobot::work(){
     if (battery_ == 0)
-        throw std::runtime_error(name_ + "battery's empty: cannot cook");
+        throw std::runtime_error(name_ + " battery's empty: cannot cook");
     
     status_ = "working";
     battery_ = std::clamp(battery_ - 20, 0, 100);
 
-    std::cout << name_ << "is cooking some delicious " << cuisine_ << "  dish with remaining battery : " << battery_ << "%\n";
+    std::cout << name_ << " is cooking some delicious " << cuisine_ << " dish with remaining battery : " << battery_ << "%\n";
 }
 
 std::string CookingRobot::type() const{

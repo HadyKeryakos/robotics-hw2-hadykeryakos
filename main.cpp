@@ -7,7 +7,10 @@
 #include <iostream>
 #include <limits>
 #include <memory>
+#include <mutex>
 #include <vector>
+
+std::mutex g_cout_mutex;
 
 void clear_input()
 {
@@ -78,14 +81,14 @@ int main()
 {
     Fleet fleet;
 
-    // Extra vector only for the std::find_if homework requirement.
-    // Fleet still owns/stores the robots in its internal unordered_map.
-    std::vector<std::shared_ptr<Robot>> robot_list;
 
     bool running = true;
 
     while (running) {
-        print_menu();
+        {
+            std::lock_guard<std::mutex> lock(g_cout_mutex);
+            print_menu();
+        }
 
         int choice = read_int("Choose option: ");
 
@@ -98,6 +101,11 @@ int main()
 
                 int type = read_int("Choose robot type: ");
 
+                if (type < 1 || type > 3) {
+                    std::cout << "Invalid robot type.\n";
+                    continue;
+                }
+
                 std::string id = read_string("Enter id: ");
                 std::string name = read_string("Enter name: ");
                 int battery = read_int("Enter battery: ");
@@ -109,36 +117,20 @@ int main()
                     robot = std::make_shared<MobileRobot>(id, name, battery, speed);
                 } else if (type == 2) {
                     double speed = read_double("Enter speed: ");
-                    std::string mode = read_string("Enter cleaning mode: ");
-
-                    // Change this constructor if your CleaningRobot uses different attributes.
-                    robot = std::make_shared<CleaningRobot>(id, name, battery, speed, mode);
+                    std::string whattoclean = read_string("Enter cleaning mode: ");
+                    robot = std::make_shared<CleaningRobot>(id, name, battery, speed, whattoclean);
                 } else if (type == 3) {
                     std::string cuisine = read_string("Enter cuisine: ");
-
-                    // Change this constructor if your CookingRobot uses different attributes.
                     robot = std::make_shared<CookingRobot>(id, name, battery, cuisine);
-                } else {
-                    std::cout << "Invalid robot type.\n";
-                    continue;
                 }
 
                 fleet.add(robot);
-                robot_list.push_back(robot);
 
                 std::cout << "Robot added.\n";
             } else if (choice == 2) {
                 std::string id = read_string("Enter robot id to remove: ");
 
                 fleet.remove(id);
-
-                robot_list.erase(
-                    std::remove_if(robot_list.begin(), robot_list.end(),
-                        [&id](const std::shared_ptr<Robot>& robot) {
-                            return robot->id() == id;
-                        }),
-                    robot_list.end()
-                );
 
                 std::cout << "Robot removed if it existed.\n";
             } else if (choice == 3) {
